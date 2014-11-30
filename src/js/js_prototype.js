@@ -835,7 +835,7 @@ function T34(){
     }
     alert(findAll(tat, 1));
 }
-
+//类数组及其遍历
 function T35(){
     var a = {};
     var  i = 0;
@@ -850,6 +850,73 @@ function T35(){
         total += a[j];
     }
     alert(total);
+}
+
+/*
+JS中的函数
+函数调用：作为函数
+        作为方法
+        作为构造函数
+        通过call()和apply()方法间接调用
+*/
+function hypotenuse(a, b){
+    function square(x){ //这里相当于是函数内部提供一个计算的功能，该部分也可以直接写在函数里，这里也可以说是重构（模块化）
+        return x*x;
+    }
+    return Math.sqrt(square(a) + square(b));
+}
+
+var calculator = { //对象直接量
+    operand1: 1,
+    operand2: 1,
+    add: function(){
+        //this指代的是当前对象
+        this.result = this.operand1 + this.operand2;
+    }
+};
+//对this关键字的使用
+var o = {
+    m: function(){
+        var self = this; //将this的值保存在变量self中
+        console.log(this === o); //true
+        f();
+        function f(){
+            console.log(this === o); //flase 这里的this指代的是全局对象或undefined
+            console.log(self === o); //true self指代的是外部函数的this值
+        }
+    }
+}
+
+//在进行数组判断时可以使用a = a ||[]来判断（申明）数组
+function T36(x, y, z){
+    if(arguments.length != 3){ //这里的arguments作为实参对象，如果想修改实参值，可以通过arguments来修改 
+        throw new Error("function f called with " + arguments.length + 
+            "aguments, but it expect 3 arguments");
+    }
+}
+
+var factorial = function(x){
+    if(x < 1){
+        return 1;
+    }
+    return x * arguments.callee(x-1); //在函数匿名的情况下，可以使用实参对象的callee属性来递归调用匿名函数
+}
+
+//注意：当一个函数的参数多于三个，可以考虑将参数作为对象的属性，然后传入对象，这样这样就不必记住实参的顺序
+function easycopy(args){
+    arraycopy(
+        args.from,
+        args.from_start || 0,
+        args.to,
+        args.t_start || 0,
+        args.length
+        );
+}
+
+function test_easycopy(){
+    var a = [1, 2, 3, 4],
+        b = [];
+        easycopy({from: a, to: b, length: 4});
 }
 
 
